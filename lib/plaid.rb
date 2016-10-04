@@ -60,5 +60,35 @@ module Plaid
         memo[k.to_sym] = values ? v.to_sym : v
       end
     end
+
+    def search_institutions(params)
+      connector = Connector.new('/institutions/search', client: Plaid.client)
+      connector.get(params)
+    end
+
+    def all_institutions
+      list = []
+      results = 1
+      offset = 0
+      while results.present?
+        connector = Connector.new('/institutions/longtail', client: Plaid.client, auth: true)
+        results = connector.post(count: 1000, offset: offset)['results']
+        list += results
+        offset += 1000
+      end
+      list
+    end
+
+    def get_transactions(params)
+      connector = Connector.new('/connect/get', client: Plaid.client)
+      connector.post(
+        count: 1000,
+        offset: 0,
+        client_id: Plaid.client.client_id,
+        secret: Plaid.client.secret,
+        access_token: params[:access_token],
+        options: { include_original_description: true, pending: true }.to_json
+      )
+    end
   end
 end

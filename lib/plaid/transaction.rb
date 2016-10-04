@@ -78,6 +78,8 @@ module Plaid
     # pending transaction - where applicable.
     attr_reader :pending_transaction_id
 
+    attr_reader :original_description
+
     # Public: Initialize a Transaction instance.
     #
     # fields - The Hash with fields.
@@ -97,6 +99,7 @@ module Plaid
       @type = Plaid.symbolize_hash(fields['type'], values: true)
       @category_hierarchy = fields['category']
       @category_id = fields['category_id']
+      @original_description = fields['original_description']
     end
 
     # Public: Detect if the transaction is pending or unsettled.

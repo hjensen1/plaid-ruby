@@ -36,6 +36,7 @@ module Plaid
     # or
     # { message: 'Code sent to xxx-xxx-5309' }
     attr_reader :mfa
+    attr_accessor :mfa_patch
 
     # Public: The String stripe bank account token.
     #
@@ -233,7 +234,7 @@ module Plaid
     # Returns an Array of Transaction records.
     def transactions(pending: false, account_id: nil,
                      start_date: nil, end_date: nil)
-      options = { pending: pending }
+      options = { pending: pending, include_original_description: true }
       options[:account] = account_id if account_id
       options[:gte] = start_date.to_s if start_date
       options[:lte] = end_date.to_s if end_date
