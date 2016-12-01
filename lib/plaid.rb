@@ -61,17 +61,17 @@ module Plaid
       end
     end
 
-    def search_institutions(params)
-      connector = Connector.new('/institutions/all/search', client: Plaid.client)
+    def search_institutions(params, endpoint = '/institutions/all/search')
+      connector = Connector.new(endpoint, client: Plaid.client)
       connector.get(params)
     end
 
-    def all_institutions
+    def all_institutions(endpoint = '/institutions/all')
       list = []
       results = 1
       offset = 0
       while results.present?
-        connector = Connector.new('/institutions/all', client: Plaid.client, auth: true)
+        connector = Connector.new(endpoint, client: Plaid.client, auth: true)
         results = connector.post(count: 1000, offset: offset)['results']
         list += results
         offset += 1000
